@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Professores</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <a href="index.html" class="voltar">
+        ⬅ Página Inicial
+    </a>
+
+    <section class="pagina">
+
+        <h1>Professores</h1>
+
+        <div class="cards">
+
+            <!-- PROFESSOR 1 -->
+
+            <div class="prof-card">
+
+                <img src="prof1.jpg" alt="Professora ELIZABETE TELES DOS SANTOS PEREIRA">
+
+                <h2>Professora ELIZABETE TELES DOS SANTOS PEREIRA</h2>
+
+                <p>Matemática</p>
+
+                <button class="btn-prof"
+                    onclick="mostrarInfo('info1')">
+
+                    Ver Informações
+
+                </button>
+
+                <div class="info-prof" id="info1">
+
+                    <p>
+                        📚 Professor de Matemática <br>
+                        🕒 Aula: 08:00 às 12:00 <br>
+                        🎓 10 anos de experiência
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- PROFESSOR 2 -->
+
+            <div class="prof-card">
+
+                <img src="prof2.jpg" alt="Professor LEONARDO AUGUSTO LEPRE">
+
+                <h2>Professor LEONARDO AUGUSTO LEPRE</h2>
+
+                <p>Português</p>
+
+                <button class="btn-prof"
+                    onclick="mostrarInfo('info2')">
+
+                    Ver Informações
+
+                </button>
+
+                <div class="info-prof" id="info2">
+
+                    <p>
+                        📖 Professora de Português <br>
+                        🕒 Aula: 13:00 às 17:00 <br>
+                        🎓 Especialista em Literatura
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <script>
+
+        function mostrarInfo(id){
+
+            let info =
+            document.getElementById(id);
+
+            if(info.style.display === "block"){
+
+                info.style.display = "none";
+
+            }else{
+
+                info.style.display = "block";
+            }
+        }
+
+    </script>
+
+</body>
+</html>
