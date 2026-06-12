@@ -803,14 +803,14 @@ nav a:hover::after{
 
     cursor: pointer;
 
-    transition: 0.4s;
-}
+        transition: 0.4s;
+    }
 
-.btn-prof:hover{
-    background: #ffd600;
+    .btn-prof:hover{
+        background: #ffd600;
 
-    color: #0d1b2a;
-}
+        color: #0d1b2a;
+    }
 
 /* INFORMAÇÕES */
 
