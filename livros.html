@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Escolar</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --dourado: #ffd600;
+      --azul: #1565c0;
+      --escuro: #0f172a;
+      --medio: #1e3a8a;
+      --vidro: rgba(255, 255, 255, 0.08);
+      --verde: #4ade80;
+      --vermelho: #ff6b6b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--escuro), var(--medio));
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--dourado);
+    }
+    nav a {
+      color: var(--dourado);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover { color: #fff; }
+    nav .direita {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    nav .direita button {
+      background: transparent;
+      border: 1px solid var(--dourado);
+      color: var(--dourado);
+    }
+
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 { color: var(--dourado); margin-bottom: 20px; }
+
+    /* ADMIN */
+    .adminBox {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      background: var(--vidro);
+      border: 1px solid rgba(255, 214, 0, 0.3);
+      border-radius: 12px;
+      margin: 10px 0 20px;
+      padding: 15px;
+    }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    /* LISTA EM GRADE: 3 livros por linha */
+    #lista {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    /* LIVRO */
+    .livro {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+      background: var(--vidro);
+      border: 1px solid var(--dourado);
+      border-radius: 15px;
+      padding: 15px;
+      backdrop-filter: blur(8px);
+    }
+    .livro img {
+      width: 70px;
+      height: 90px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--dourado);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .livro .dados { width: 100%; }
+    h3 { color: var(--dourado); margin-bottom: 4px; }
+    .info { font-size: 13px; color: #ddd; line-height: 1.6; }
+    .livre { color: var(--verde); font-weight: bold; }
+    .alugado { color: var(--vermelho); font-weight: bold; }
+    .acoes { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+
+    /* LEITOR + PROGRESSO DE LEITURA */
+    .leitor { font-size: 13px; color: #fff; margin-top: 6px; }
+    .leitor b { color: var(--dourado); }
+    .barra-fundo {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .barra-cheia {
+      height: 100%;
+      width: 0%;
+      background: var(--verde);
+      transition: width 0.2s ease;
+    }
+    .pct { font-size: 12px; color: var(--dourado); font-weight: bold; margin-top: 4px; }
+    .range-prog {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      min-width: 0;
+      flex: none;
+      height: 6px;
+      padding: 0;
+      margin-top: 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+    }
+    .range-prog::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--dourado);
+      border: none;
+      cursor: pointer;
+    }
+    .range-prog::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--dourado);
+      border: none;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+      background: var(--azul);
+      color: #fff;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.85; }
+    .btn-add { background: #22c55e; }
+    .btn-remover { background: transparent; border: 1px solid var(--vermelho); color: var(--vermelho); }
+
+    /* 2 por linha em telas médias, 1 por linha no celular */
+    @media (max-width: 700px) {
+      #lista { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 450px) {
+      #lista { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html">🏠 Início</a>
+  <a href="perfil.html">👤 Perfil</a>
+  <div class="direita">
+    <a href="#" onclick="logout()">🚪 Sair</a>
+  </div>
+</nav>
+
+<main>
+  <h1>📚 Biblioteca Escolar</h1>
+
+  <!-- ADMIN -->
+  <div id="adminArea" class="adminBox" style="display:none;">
+    <input id="nome" placeholder="Nome do livro">
+    <input id="img" placeholder="URL da imagem (opcional)">
+    <button class="btn-add" onclick="addLivro()">➕ Adicionar</button>
+  </div>
+
+  <!-- LISTA -->
+  <div id="lista"></div>
+</main>
+
+<script>
+"use strict";
+
+/* ===== CONFIGURAÇÃO ===== */
+const SENHA_ADMIN = "1234";                      // troque pela senha que quiser
+const MS_EMPRESTIMO = 7 * 24 * 60 * 60 * 1000;  // 7 dias
+
+/* Capa usada quando o livro não tem imagem ou a URL falha */
+const CAPA_PADRAO =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='90'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3Ctext x='50%25' y='50%25' fill='%23ffd600' font-size='28' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
+
+/* ===== ARMAZENAMENTO ===== */
+function getLivros() {
+  try {
+    return JSON.parse(localStorage.getItem("livros")) || [];
+  } catch {
+    return [];
+  }
+}
+
+function setLivros(d) {
+  localStorage.setItem("livros", JSON.stringify(d));
+}
+
+/* ===== UTILITÁRIO ===== */
+// evita que nomes/URLs quebrem o HTML (segurança)
+function escapar(t) {
+  const d = document.createElement("div");
+  d.textContent = t ?? "";
+  return d.innerHTML;
+}
+
+/* ===== DADOS INICIAIS ===== */
+function init() {
+  let livros = getLivros();
+
+  if (livros.length === 0) {
+    livros = [
+      { nome: "Matemática", img: "", status: "livre", inicio: null, fila: [], alugadoPor: null, progresso: 0 },
+      { nome: "História",   img: "", status: "livre", inicio: null, fila: [], alugadoPor: null, progresso: 0 },
+      { nome: "Português",  img: "", status: "livre", inicio: null, fila: [], alugadoPor: null, progresso: 0 },
+    ];
+    setLivros(livros);
+  }
+}
+
+/* ===== ADICIONAR ===== */
+function addLivro() {
+  const nome = document.getElementById("nome").value.trim();
+  const img = document.getElementById("img").value.trim();
+
+  if (!nome) {
+    alert("Digite o nome do livro.");
+    return;
+  }
+
+  const livros = getLivros();
+  livros.push({ nome, img, status: "livre", inicio: null, fila: [], alugadoPor: null, progresso: 0 });
+  setLivros(livros);
+
+  document.getElementById("nome").value = "";
+  document.getElementById("img").value = "";
+  render();
+}
+
+/* ===== ALUGAR ===== */
+function alugar(i) {
+  const livros = getLivros();
+  const user = localStorage.getItem("usuario") || "Aluno";
+
+  if (livros[i].status === "livre") {
+    livros[i].status = "alugado";
+    livros[i].inicio = Date.now();
+    livros[i].alugadoPor = user;   // guarda o nome de quem alugou
+    livros[i].progresso = 0;       // começa a leitura em 0%
+  } else if (!livros[i].fila.includes(user)) {
+    livros[i].fila.push(user);
+  } else {
+    alert("Você já está na fila deste livro.");
+    return;
+  }
+
+  setLivros(livros);
+  render();
+}
+
+/* ===== RENOVAR ===== */
+function renovar(i) {
+  const livros = getLivros();
+  if (livros[i].status !== "alugado") return;
+
+  livros[i].inicio = Date.now();
+  setLivros(livros);
+  render();
+}
+
+/* ===== PROGRESSO DE LEITURA ===== */
+function setProgresso(i, valor) {
+  const livros = getLivros();
+  if (livros[i].status !== "alugado") return;
+
+  const p = Math.max(0, Math.min(100, Number(valor) || 0));
+  livros[i].progresso = p;
+  setLivros(livros);
+
+  // atualiza sem re-renderizar tudo (mantém o slider suave)
+  const barra = document.getElementById("barra-" + i);
+  const pct = document.getElementById("pct-" + i);
+  if (barra) barra.style.width = p + "%";
+  if (pct) pct.textContent = p + "% lido";
+}
+
+/* ===== DESALUGAR ===== */
+function desalugar(i) {
+  const livros = getLivros();
+  const tipo = localStorage.getItem("tipo");
+
+  // se houver fila (e não for o admin limpando), passa para o próximo
+  if (livros[i].fila.length > 0 && tipo !== "admin") {
+    livros[i].status = "alugado";
+    livros[i].inicio = Date.now();
+    livros[i].alugadoPor = livros[i].fila.shift(); // próximo da fila vira o leitor
+    livros[i].progresso = 0;                        // nova leitura começa em 0%
+  } else {
+    livros[i].status = "livre";
+    livros[i].inicio = null;
+    livros[i].alugadoPor = null;
+    livros[i].progresso = 0;
+    if (tipo === "admin") livros[i].fila = [];
+  }
+
+  setLivros(livros);
+  render();
+}
+
+/* ===== REMOVER (admin) ===== */
+function remover(i) {
+  const livros = getLivros();
+  if (!confirm(`Remover "${livros[i].nome}" do acervo?`)) return;
+
+  livros.splice(i, 1);
+  setLivros(livros);
+  render();
+}
+
+/* ===== TEMPO RESTANTE ===== */
+function tempoRestante(ms) {
+  if (!ms) return "";
+  const restante = ms + MS_EMPRESTIMO - Date.now();
+  const dias = Math.ceil(restante / (1000 * 60 * 60 * 24));
+  return dias > 0 ? `${dias} dia(s) restante(s)` : "Vencido";
+}
+
+/* ===== RENDER ===== */
+function render() {
+  const livros = getLivros();
+  const tipo = localStorage.getItem("tipo") || "aluno";
+  let html = "";
+
+  livros.forEach((l, i) => {
+    const statusHtml = l.status === "livre"
+      ? `<span class="livre">Disponível</span>`
+      : `<span class="alugado">Alugado</span> — ${tempoRestante(l.inicio)}`;
+
+    const filaHtml = l.fila.length ? `<br>Fila: ${l.fila.length} pessoa(s)` : "";
+
+    // quando está alugado: mostra quem alugou e a porcentagem de leitura
+    let leitorHtml = "";
+    if (l.status === "alugado") {
+      const p = Math.max(0, Math.min(100, Number(l.progresso) || 0));
+      leitorHtml = `
+        <div class="leitor">📖 Alugado por <b>${escapar(l.alugadoPor || "Aluno")}</b></div>
+        <div class="barra-fundo"><div class="barra-cheia" id="barra-${i}" style="width:${p}%"></div></div>
+        <div class="pct" id="pct-${i}">${p}% lido</div>
+        <input type="range" class="range-prog" min="0" max="100" value="${p}"
+               oninput="setProgresso(${i}, this.value)"
+               aria-label="Progresso de leitura de ${escapar(l.nome)}">
+      `;
+    }
+
+    // todos os botões aparecem sempre, sem precisar alugar primeiro
+    let acoes = "";
+    acoes += `<button onclick="alugar(${i})">📖 Alugar</button>`;
+    acoes += `<button onclick="renovar(${i})">🔁 Renovar</button>`;
+    acoes += `<button onclick="desalugar(${i})">📦 Desalugar</button>`;
+    if (tipo === "admin") {
+      acoes += `<button class="btn-remover" onclick="remover(${i})">🗑 Remover</button>`;
+    }
+
+    html += `
+      <div class="livro">
+        <img src="${l.img ? escapar(l.img) : CAPA_PADRAO}"
+             alt="Capa de ${escapar(l.nome)}"
+             onerror="this.src='${CAPA_PADRAO}'">
+        <div class="dados">
+          <h3>${escapar(l.nome)}</h3>
+          <div class="info">Status: ${statusHtml}${filaHtml}</div>
+          ${leitorHtml}
+          <div class="acoes">${acoes}</div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("lista").innerHTML =
+    html || `<p style="color:#cbd5e1;text-align:center;padding:20px;">Nenhum livro no acervo.</p>`;
+}
+
+/* ===== ENTRAR / SAIR DO MODO ADMIN ===== */
+function entrarAdmin() {
+  if (localStorage.getItem("tipo") === "admin") {
+    localStorage.setItem("tipo", "aluno");
+    document.getElementById("adminArea").style.display = "none";
+    render();
+    return;
+  }
+
+  const senha = prompt("Senha do administrador:");
+  if (senha === null) return;
+
+  if (senha === SENHA_ADMIN) {
+    localStorage.setItem("tipo", "admin");
+    if (!localStorage.getItem("usuario")) localStorage.setItem("usuario", "Admin");
+    localStorage.setItem("loginTime", String(Date.now())); // marca o horário de login
+    document.getElementById("adminArea").style.display = "block";
+    render();
+  } else {
+    alert("Senha incorreta.");
+  }
+}
+
+/* ===== LOGOUT ===== */
+function logout() {
+  if (!confirm("Deseja sair?")) return;
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+
+/* ===== INÍCIO ===== */
+window.onload = function () {
+  init();
+
+  if (localStorage.getItem("tipo") === "admin") {
+    document.getElementById("adminArea").style.display = "block";
+  }
+
+  render();
+};
+</script>
+
+</body>
+</html>
