@@ -2,57 +2,286 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Contato</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contato - Colégio Paganoto</title>
 
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --dourado: #ffd600;
+      --azul: #1565c0;
+      --escuro: #0f172a;
+      --medio: #1e3a8a;
+      --vidro: rgba(255, 255, 255, 0.08);
+      --vermelho: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, var(--escuro), var(--medio));
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    /* BARRA IGUAL TELA INICIAL */
+    nav {
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--dourado);
+    }
+    nav a {
+      color: var(--dourado);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover { color: #fff; }
+
+    /* BOX CONTATO */
+    .box {
+      max-width: 600px;
+      margin: 30px auto;
+      background: var(--vidro);
+      padding: 22px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--dourado);
+    }
+    .box h2 { color: var(--dourado); margin-top: 0; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-top: 10px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      font-size: 14px;
+      font-family: inherit;
+      color: #0f172a;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--azul);
+    }
+    textarea { min-height: 110px; resize: vertical; }
+
+    button {
+      padding: 10px 16px;
+      background: var(--azul);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.85; }
+
+    /* AVISO DE VALIDAÇÃO */
+    .aviso {
+      min-height: 18px;
+      font-size: 13px;
+      margin: 6px 0 0;
+    }
+    .aviso.erro { color: #fca5a5; }
+    .aviso.ok { color: #86efac; }
+
+    .contador {
+      font-size: 13px;
+      color: #cbd5e1;
+      font-weight: normal;
+    }
+
+    /* MENSAGENS */
+    .msg {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px 40px 12px 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      color: #e2e8f0;
+      position: relative;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .msg .autor { color: var(--dourado); }
+    .msg small { color: #94a3b8; }
+
+    .vazio {
+      color: #94a3b8;
+      text-align: center;
+      padding: 16px;
+    }
+
+    .del {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      background: var(--vermelho);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+
 </head>
 
 <body>
-    <a href="index.html" class="voltar">
-        ⬅ Voltar ao Início
-    </a>
 
-    <section class="contato-container">
+<!-- NAV -->
+<nav>
+  <a href="index.html">Início</a>
+  <a href="perfil.html">Perfil</a>
+  <a href="livros.html">Livros</a>
+</nav>
 
-        <div class="contato-card">
+<!-- FORM -->
+<div class="box">
+  <h2>📩 Fale conosco</h2>
 
-            <h1>Contato</h1>
+  <label for="nome">Seu nome</label>
+  <input id="nome" placeholder="Seu nome" maxlength="60" autocomplete="name">
 
-            <p class="descricao">
-                Entre em contato com a secretaria do colégio.
-            </p>
+  <label for="msg">Mensagem</label>
+  <textarea id="msg" placeholder="Escreva sua mensagem" maxlength="500"></textarea>
 
-            <div class="info">
+  <p id="aviso" class="aviso" role="status" aria-live="polite"></p>
 
-                <div class="item">
-                    <h2>📞 Telefone</h2>
-                    <p>(45) 3524-4371</p>
-                </div>
+  <button onclick="enviar()">Enviar</button>
+</div>
 
-                <div class="item">
-                    <h2>📧 E-mail</h2>
-                    <p>fozmariianopaganoto@seed.pr.gov.br</p>
-                </div>
+<!-- LISTA -->
+<div class="box">
+  <h2>💬 Mensagens <span id="contador" class="contador"></span></h2>
+  <div id="lista"></div>
+</div>
 
-                <div class="item">
-                    <h2>📍 Endereço</h2>
-                    <p>
-                        Rua Gaspar, nº 447 <br>
-                        Bairro KLP - Foz do Iguaçu/PR
-                    </p>
-                </div>
+<script>
+"use strict";
 
-                <div class="item">
-                    <h2>🕒 Horário</h2>
-                    <p>08:00 - 21:00</p>
-                </div>
+/* ===== ARMAZENAMENTO ===== */
+function getMsgs() {
+  try {
+    return JSON.parse(localStorage.getItem("msgs")) || [];
+  } catch {
+    return [];
+  }
+}
 
-            </div>
+function saveMsgs(d) {
+  localStorage.setItem("msgs", JSON.stringify(d));
+}
 
-        </div>
+/* ===== UTILITÁRIO ===== */
+// evita que o texto quebre o HTML / injeção de código (segurança)
+function escapar(t) {
+  const d = document.createElement("div");
+  d.textContent = t ?? "";
+  return d.innerHTML;
+}
 
-    </section>
+function mostrarAviso(texto, tipo) {
+  const el = document.getElementById("aviso");
+  el.textContent = texto;
+  el.className = "aviso " + (tipo || "");
+}
+
+/* ===== ENVIAR ===== */
+function enviar() {
+  const nome = document.getElementById("nome").value.trim();
+  const msg = document.getElementById("msg").value.trim();
+
+  if (!nome || !msg) {
+    mostrarAviso("Preencha o nome e a mensagem.", "erro");
+    return;
+  }
+
+  const dados = getMsgs();
+  dados.push({
+    nome,
+    msg,
+    data: new Date().toLocaleString("pt-BR"),
+  });
+  saveMsgs(dados);
+
+  document.getElementById("nome").value = "";
+  document.getElementById("msg").value = "";
+  mostrarAviso("Mensagem enviada! ✅", "ok");
+
+  render();
+}
+
+/* ===== REMOVER (admin) ===== */
+function remover(i) {
+  const tipo = localStorage.getItem("tipo");
+  if (tipo !== "admin") {
+    alert("Só admin pode apagar!");
+    return;
+  }
+
+  if (!confirm("Apagar esta mensagem?")) return;
+
+  const dados = getMsgs();
+  dados.splice(i, 1);
+  saveMsgs(dados);
+  render();
+}
+
+/* ===== RENDER ===== */
+function render() {
+  const dados = getMsgs();
+  const tipo = localStorage.getItem("tipo");
+
+  document.getElementById("contador").textContent =
+    dados.length ? `(${dados.length})` : "";
+
+  if (dados.length === 0) {
+    document.getElementById("lista").innerHTML =
+      `<p class="vazio">Nenhuma mensagem ainda. Seja o primeiro a escrever!</p>`;
+    return;
+  }
+
+  let html = "";
+
+  // mais recentes primeiro
+  dados.forEach((m, i) => {
+    const botaoDel = tipo === "admin"
+      ? `<button class="del" title="Apagar" onclick="remover(${i})">X</button>`
+      : "";
+
+    html =
+      `
+      <div class="msg">
+        ${botaoDel}
+        <b class="autor">${escapar(m.nome)}</b><br>
+        ${escapar(m.msg)}<br>
+        <small>${escapar(m.data)}</small>
+      </div>
+    ` + html;
+  });
+
+  document.getElementById("lista").innerHTML = html;
+}
+
+window.onload = render;
+</script>
 
 </body>
 </html>

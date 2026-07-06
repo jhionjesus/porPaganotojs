@@ -1,119 +1,372 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colégio Paganoto</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colégio Paganoto</title>
 
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ===== JANELA DE LOGIN (modal) ===== */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      z-index: 9998;
+    }
+
+    .login-box {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(340px, 90vw);
+      background: #fff;
+      color: #0f172a;
+      padding: 26px;
+      border-radius: 16px;
+      z-index: 9999;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border-top: 6px solid #ffd600;
+      animation: aparecer 0.25s ease;
+    }
+    .login-box h3 {
+      margin-bottom: 16px;
+      text-align: center;
+      color: #1565c0;
+      font-size: 22px;
+    }
+
+    /* abas Entrar / Cadastrar */
+    .login-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .login-tabs button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #e2e8f0;
+      color: #334155;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .login-tabs button.ativo {
+      background: #1565c0;
+      color: #fff;
+    }
+
+    .login-box .campo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    .login-box .campo:focus-within { border-color: #1565c0; }
+    .login-box .campo input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 15px;
+      background: transparent;
+    }
+    .login-box .btn-entrar,
+    .login-box .btn-fechar {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .login-box .btn-entrar { background: #1565c0; color: #fff; margin-top: 4px; }
+    .login-box .btn-fechar { background: #e2e8f0; color: #334155; margin-top: 10px; }
+    .login-box .btn-entrar:hover,
+    .login-box .btn-fechar:hover { opacity: 0.85; }
+    .login-box .dica {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translate(-50%, -46%); }
+      to   { opacity: 1; transform: translate(-50%, -50%); }
+    }
+  </style>
 </head>
 
 <body>
 
-    <!-- TOPO -->
+<!-- 🔝 TOPO -->
+<header class="topo">
+  <div class="logo-area">
+    <img src="img/logo.png" alt="Logo do Colégio">
+    <span>Colégio Paganoto</span>
+  </div>
 
-    <header class="topo">
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="perfil.html" id="linkPerfil" style="display:none;">👤 Perfil</a>
+    <a href="livros.html">📚 Livros</a>
+    <a href="boletim.html">📊 Boletim</a>
+    <a href="contato.html">Contato</a>
+    <a href="professores.html">Professores</a>
+    <a href="calendario.html">Calendário</a>
+    <a href="#" onclick="abrirLogin()" id="botaoLogin">🔐 Entrar ou Cadastrar</a>
+    <a href="#" onclick="logout()" id="botaoSair" style="display:none;">🚪 Sair</a>
+  </nav>
+</header>
 
-        <div class="logo-area">
+<!-- 🧠 CONTEÚDO PRINCIPAL -->
+<main class="main">
 
-            <img src="logo.png" alt="Logo do Colégio">
+  <section class="main-texto">
+    <h1>Educação com propósito, acolhimento e futuro</h1>
+    <div class="linha"></div>
+    <p>
+      O Colégio Paganoto oferece ensino de qualidade, professores
+      preparados e um ambiente acolhedor para o desenvolvimento dos alunos.
+    </p>
+    <a class="botao" href="contato.html">Entre em Contato!</a>
+  </section>
 
-            <span>Colégio Paganoto</span>
+  <section class="main-imagem">
+    <div class="apresentacao">
+      <img src="img/escola.jpg" alt="Imagem do Colégio">
+      <h2>Colégio</h2>
+      <p>Conhecimento sendo construído todos os dias.</p>
+    </div>
+  </section>
 
-        </div>
+  <section class="conteudo">
+    <div class="texto">
+      <h2>Sobre o Colégio</h2>
+      <p>
+        ✔ Merenda escolar<br><br>
+        ✔ Professores qualificados<br><br>
+        ✔ Projetos escolares<br><br>
+        ✔ Ensino moderno<br><br>
+        ✔ Ambiente acolhedor
+      </p>
+      <img src="img/aluno.jpg" alt="Aluno feliz indo para a sala">
+    </div>
+  </section>
 
-        <nav>
+</main>
 
-            <a href="index.html">Início</a>
+<!-- 🔐 LOGIN / CADASTRO -->
+<div id="overlay" class="overlay" onclick="fecharLogin()"></div>
 
-            <a href="contato.html">Contato</a>
+<div id="loginBox" class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitulo">
+  <h3 id="loginTitulo">🔐 Entrar ou Cadastrar</h3>
 
-            <a href="professores.html">Professores</a>
+  <div class="login-tabs">
+    <button type="button" id="tabEntrar" class="ativo" onclick="mostrarAba('entrar')">Entrar</button>
+    <button type="button" id="tabCadastrar" onclick="mostrarAba('cadastrar')">Cadastrar</button>
+  </div>
 
-            <a href="calendario.html">Calendário</a>
+  <!-- FORM ENTRAR -->
+  <form id="formEntrar" onsubmit="fazerLogin(event)">
+    <div class="campo">
+      <span aria-hidden="true">👤</span>
+      <input type="text" placeholder="Usuário" autocomplete="username" required>
+    </div>
+    <div class="campo">
+      <span aria-hidden="true">🔒</span>
+      <input type="password" placeholder="Senha" autocomplete="current-password" required>
+    </div>
 
-        </nav>
+    <button type="submit" class="btn-entrar">Entrar</button>
+  </form>
 
-    </header>
+  <!-- FORM CADASTRAR -->
+  <form id="formCadastrar" style="display:none;" onsubmit="fazerCadastro(event)">
+    <div class="campo">
+      <span aria-hidden="true">👤</span>
+      <input type="text" placeholder="Novo usuário" autocomplete="username" required>
+    </div>
+    <div class="campo">
+      <span aria-hidden="true">🔒</span>
+      <input type="password" placeholder="Senha" autocomplete="new-password" required>
+    </div>
+    <div class="campo">
+      <span aria-hidden="true">✅</span>
+      <input type="password" placeholder="Confirmar senha" autocomplete="new-password" required>
+    </div>
 
-    <!-- MAIN -->
+    <button type="submit" class="btn-entrar">Cadastrar</button>
+  </form>
 
-    <main class="main">
+  <button type="button" class="btn-fechar" onclick="fecharLogin()">Fechar</button>
+</div>
 
-        <!-- TEXTO -->
+<!-- ⚙️ SCRIPT UNIFICADO -->
+<script>
+"use strict";
 
-        <section class="main-texto">
+let usuarioLogado = null;
+let tipoUsuario = null;
 
-            <h1>
-                Educação com propósito,
-                acolhimento e futuro
-            </h1>
+// 🔓 abrir login
+function abrirLogin() {
+  document.getElementById("loginBox").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+  mostrarAba("entrar");
+  const primeiro = document.querySelector("#formEntrar input");
+  if (primeiro) primeiro.focus();
+}
 
-            <div class="linha"></div>
+// 🔒 fechar login
+function fecharLogin() {
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+}
 
-            <p>
-                O Colégio Paganoto oferece ensino de qualidade,
-                professores preparados e um ambiente acolhedor
-                para o desenvolvimento dos alunos.
-            </p>
+// 🔁 alternar entre Entrar e Cadastrar
+function mostrarAba(aba) {
+  const ehEntrar = aba === "entrar";
 
-            <a class="botao" href="contato.html">
-                Entre em Contato!
-            </a>
+  document.getElementById("formEntrar").style.display = ehEntrar ? "block" : "none";
+  document.getElementById("formCadastrar").style.display = ehEntrar ? "none" : "block";
 
-        </section>
+  document.getElementById("tabEntrar").classList.toggle("ativo", ehEntrar);
+  document.getElementById("tabCadastrar").classList.toggle("ativo", !ehEntrar);
 
-        <!-- IMAGEM -->
+  document.getElementById("loginTitulo").textContent =
+    ehEntrar ? "🔐 Entrar" : "📝 Cadastrar";
+}
 
-        <section class="main-imagem">
+// 📇 usuários cadastrados (localStorage)
+function lerCadastros() {
+  try {
+    return JSON.parse(localStorage.getItem("cadastros")) || {};
+  } catch (e) {
+    return {};
+  }
+}
 
-            <div class="apresentacao">
+// 🔐 login
+function fazerLogin(event) {
+  event.preventDefault();
 
-                <img src="escola.jpg" alt="Imagem do Colégio">
+  const u = event.target[0].value.trim();
+  const s = event.target[1].value.trim();
 
-                <h2>Colégio</h2>
+  const cadastros = lerCadastros();
 
-                <p>
-                    Conhecimento sendo construído todos os dias.
-                </p>
+  if (u === "jhion" && s === "12345") {
+    entrar("Admin", "admin");
 
-            </div>
+  } else if (u === "professor" && s === "prof123") {
+    entrar("Professor", "professor");
 
-        </section>
+  } else if (u === "aluno" && s === "1234") {
+    entrar("Aluno", "aluno");
 
-        <!-- SOBRE -->
+  } else if (cadastros[u] && cadastros[u] === s) {
+    entrar(u, "aluno");
 
-        <section class="conteudo">
+  } else {
+    alert("Usuário ou senha inválidos!");
+  }
+}
 
-            <div class="texto">
+// 📝 cadastro
+function fazerCadastro(event) {
+  event.preventDefault();
 
-                <h2>Sobre o Colégio</h2>
+  const u = event.target[0].value.trim();
+  const s = event.target[1].value.trim();
+  const c = event.target[2].value.trim();
 
-                <p>
-                    ✔ Merenda escolar
-                    <br><br>
+  if (s !== c) {
+    alert("As senhas não coincidem!");
+    return;
+  }
 
-                    ✔ Professores qualificados
-                    <br><br>
+  const cadastros = lerCadastros();
 
-                    ✔ Projetos escolares
-                    <br><br>
+  if (cadastros[u] || u === "jhion" || u === "aluno" || u === "professor") {
+    alert("Este usuário já existe!");
+    return;
+  }
 
-                    ✔ Ensino moderno
-                    <br><br>
+  cadastros[u] = s;
+  localStorage.setItem("cadastros", JSON.stringify(cadastros));
 
-                    ✔ Ambiente acolhedor
-                </p>
+  alert("Cadastro realizado com sucesso!");
+  entrar(u, "aluno");
+}
 
-                <img src="aluno.jpg" alt="Aluno feliz indo para a sala">
+// ✅ efetiva o login
+function entrar(nome, tipo) {
+  usuarioLogado = nome;
+  tipoUsuario = tipo;
+  salvarSessao();
+  atualizarMenu();
+  window.location.href = "perfil.html";
+}
 
-            </div>
+// 💾 salvar sessão
+function salvarSessao() {
+  localStorage.setItem("usuario", usuarioLogado);
+  localStorage.setItem("tipo", tipoUsuario);
+  localStorage.setItem("loginTime", String(Date.now())); // horário do login (cronômetro do perfil)
+}
 
-        </section>
+// 🔄 atualizar menu
+function atualizarMenu() {
+  document.getElementById("botaoLogin").style.display = "none";
 
-    </main>
+  const perfil = document.getElementById("linkPerfil");
+  const sair = document.getElementById("botaoSair");
+
+  if (perfil) perfil.style.display = "inline";
+  if (sair) sair.style.display = "inline";
+}
+
+// 🚪 logout
+function logout() {
+  localStorage.removeItem("usuario");
+  localStorage.removeItem("tipo");
+  localStorage.removeItem("loginTime");
+  location.reload();
+}
+
+// ⌨️ fecha o login com a tecla Esc
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") fecharLogin();
+});
+
+// 🔁 recuperar sessão
+window.onload = function () {
+  const user = localStorage.getItem("usuario");
+  const tipo = localStorage.getItem("tipo");
+
+  if (user && tipo) {
+    usuarioLogado = user;
+    tipoUsuario = tipo;
+    atualizarMenu();
+  }
+};
+</script>
 
 </body>
-
 </html>

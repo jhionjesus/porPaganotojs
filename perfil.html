@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --dourado: #ffd600;
+      --dourado2: #ffb300;
+      --azul: #1565c0;
+      --azul2: #42a5f5;
+      --escuro: #0f172a;
+      --medio: #1e3a8a;
+      --vidro: rgba(255, 255, 255, 0.07);
+      --verde: #4ade80;
+      --roxo: #7c3aed;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--escuro), var(--medio));
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* brilhos decorativos no fundo */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      z-index: 0;
+    }
+    body::before {
+      width: 320px; height: 320px;
+      background: var(--azul2);
+      top: -80px; right: -60px;
+    }
+    body::after {
+      width: 300px; height: 300px;
+      background: var(--dourado);
+      bottom: -100px; left: -80px;
+      opacity: 0.2;
+    }
+
+    /* NAV */
+    nav {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--dourado);
+    }
+    nav a {
+      color: var(--dourado);
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.25s;
+    }
+    nav a:hover { color: #fff; transform: translateY(-1px); }
+    nav .sair { margin-left: auto; }
+
+    main {
+      position: relative;
+      z-index: 2;
+      padding: 40px 20px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: var(--dourado);
+      margin-bottom: 28px;
+      text-align: center;
+      font-size: 28px;
+      text-shadow: 0 0 18px rgba(255, 214, 0, 0.4);
+    }
+
+    /* CARTÃO DE PERFIL */
+    .card {
+      position: relative;
+      background: var(--vidro);
+      border: 1px solid rgba(255, 214, 0, 0.35);
+      border-radius: 22px;
+      padding: 34px 26px 28px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      animation: subir 0.6s ease both;
+    }
+    /* faixa colorida no topo do card */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 90px;
+      background: linear-gradient(120deg, var(--azul), var(--roxo));
+      opacity: 0.55;
+      z-index: 0;
+    }
+
+    /* AVATAR com anel giratório */
+    .avatar-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 16px;
+      z-index: 1;
+    }
+    .avatar-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(var(--dourado), var(--azul2), var(--roxo), var(--dourado));
+      animation: girar 6s linear infinite;
+    }
+    .avatar {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--azul), var(--roxo));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 46px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border: 4px solid var(--escuro);
+      z-index: 1;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .nome {
+      position: relative;
+      z-index: 1;
+      font-size: 26px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .badge.admin {
+      background: linear-gradient(135deg, var(--dourado), var(--dourado2));
+      color: var(--escuro);
+      box-shadow: 0 0 16px rgba(255, 214, 0, 0.5);
+    }
+    .badge.aluno {
+      background: linear-gradient(135deg, var(--verde), #22c55e);
+      color: var(--escuro);
+    }
+
+    /* STATS em cartões */
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .stat {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 16px 10px;
+      transition: 0.3s;
+    }
+    .stat:hover {
+      transform: translateY(-4px);
+      border-color: var(--dourado);
+      box-shadow: 0 6px 20px rgba(255, 214, 0, 0.2);
+    }
+    .stat .num {
+      font-size: 30px;
+      font-weight: bold;
+      color: var(--dourado);
+      line-height: 1.1;
+    }
+    .stat .lbl {
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-top: 4px;
+    }
+
+    /* CRONÔMETRO DE SESSÃO */
+    .cronometro {
+      margin-top: 4px;
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 214, 0, 0.25);
+    }
+    .cronometro .lbl {
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+    .cronometro .tempo {
+      font-family: "Courier New", monospace;
+      font-size: 34px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: var(--dourado);
+      text-shadow: 0 0 14px rgba(255, 214, 0, 0.5);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 13px 26px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, var(--azul), var(--azul2));
+      border: 2px solid var(--dourado);
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.3s;
+      box-shadow: 0 4px 16px rgba(21, 101, 192, 0.5);
+    }
+    .btn:hover {
+      transform: scale(1.06);
+      background: linear-gradient(135deg, var(--dourado), var(--dourado2));
+      color: var(--escuro);
+    }
+
+    /* ===== MODAL EDITAR PERFIL ===== */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 50;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(360px, 92vw);
+      background: #0f172a;
+      border: 1px solid rgba(255, 214, 0, 0.4);
+      border-top: 6px solid var(--dourado);
+      border-radius: 18px;
+      padding: 26px;
+      z-index: 60;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    .modal h3 { color: var(--dourado); margin-bottom: 18px; font-size: 20px; }
+
+    .foto-preview {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      border: 3px solid var(--dourado);
+      background: linear-gradient(135deg, var(--azul), var(--roxo));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: bold;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    .foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    .modal label {
+      display: block;
+      text-align: left;
+      font-size: 13px;
+      color: #cbd5e1;
+      margin: 12px 0 4px;
+    }
+    .modal input[type="text"] {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #fff;
+      font-size: 15px;
+    }
+    .modal input[type="text"]:focus { outline: none; border-color: var(--azul2); }
+
+    .file-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px dashed var(--dourado);
+      color: var(--dourado);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      background: transparent;
+    }
+    .file-btn:hover { background: rgba(255, 214, 0, 0.08); }
+    #fotoInput { display: none; }
+
+    .modal-acoes { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-acoes button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-salvar { background: var(--verde); color: var(--escuro); }
+    .btn-cancelar { background: #334155; color: #fff; }
+    .btn-remover-foto {
+      margin-top: 10px;
+      background: transparent;
+      border: none;
+      color: #fca5a5;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .modal-acoes button:hover { opacity: 0.85; }
+
+    @keyframes subir {
+      from { opacity: 0; transform: translateY(25px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes girar {
+      to { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, .avatar-wrap::before, .card { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html">🏠 Início</a>
+  <a href="livros.html">📚 Livros</a>
+  <a href="boletim.html">📊 Boletim</a>
+  <a href="#" class="sair" onclick="logout()">🚪 Sair</a>
+</nav>
+
+<main>
+  <h1>👤 Perfil do Usuário</h1>
+  <div id="box"></div>
+</main>
+
+<!-- MODAL EDITAR PERFIL -->
+<div id="overlay" class="overlay" onclick="fecharEditar()"></div>
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloEditar">
+  <h3 id="tituloEditar">✏️ Editar perfil</h3>
+
+  <div class="foto-preview" id="fotoPreview"></div>
+
+  <label for="fotoInput">Foto de perfil</label>
+  <label class="file-btn" for="fotoInput">📷 Escolher imagem</label>
+  <input type="file" id="fotoInput" accept="image/*" onchange="previewFoto(this)">
+  <button type="button" class="btn-remover-foto" onclick="removerFoto()">Remover foto</button>
+
+  <label for="editNome">Nome</label>
+  <input type="text" id="editNome" maxlength="40" placeholder="Seu nome">
+
+  <div class="modal-acoes">
+    <button type="button" class="btn-cancelar" onclick="fecharEditar()">Cancelar</button>
+    <button type="button" class="btn-salvar" onclick="salvarPerfil()">Salvar</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+let fotoTemp = null; // foto escolhida no modal, ainda não salva
+
+// evita que o nome quebre o HTML
+function escapar(t) {
+  const d = document.createElement("div");
+  d.textContent = t ?? "";
+  return d.innerHTML;
+}
+
+// conta quantos livros o usuário está usando (alugados ou na fila)
+function contarLivros(user) {
+  let livros;
+  try { livros = JSON.parse(localStorage.getItem("livros")) || []; }
+  catch { livros = []; }
+
+  const alugados = livros.filter((l) => l.alugadoPor === user).length;
+  const naFila = livros.filter((l) => Array.isArray(l.fila) && l.fila.includes(user)).length;
+  return { alugados, naFila };
+}
+
+// desenha o avatar (foto ou inicial do nome)
+function avatarHtml(user, foto) {
+  return foto
+    ? `<img src="${foto}" alt="Foto de ${escapar(user)}">`
+    : escapar(user.charAt(0));
+}
+
+// monta o cartão de perfil
+function renderPerfil() {
+  const user = localStorage.getItem("usuario");
+  const tipo = localStorage.getItem("tipo");
+  const foto = localStorage.getItem("foto");
+
+  const ehAdmin = tipo === "admin";
+  const rotulo = ehAdmin ? "👑 Administrador" : "🎓 Aluno";
+  const { alugados, naFila } = contarLivros(user);
+
+  document.getElementById("box").innerHTML = `
+    <div class="card">
+      <div class="avatar-wrap">
+        <div class="avatar">${avatarHtml(user, foto)}</div>
+      </div>
+      <div class="nome">${escapar(user)}</div>
+      <span class="badge ${ehAdmin ? "admin" : "aluno"}">${rotulo}</span>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="num">${alugados}</div>
+          <div class="lbl">📖 Livros alugados</div>
+        </div>
+        <div class="stat">
+          <div class="num">${naFila}</div>
+          <div class="lbl">⏳ Na fila de espera</div>
+        </div>
+      </div>
+
+      <div class="cronometro">
+        <div class="lbl">⏱️ Tempo conectado</div>
+        <div class="tempo" id="cronometro">00:00:00</div>
+      </div>
+
+      <button class="btn" onclick="abrirEditar()">✏️ Editar perfil</button>
+    </div>
+  `;
+}
+
+/* ===== EDITAR NOME E FOTO ===== */
+function abrirEditar() {
+  const user = localStorage.getItem("usuario");
+  const foto = localStorage.getItem("foto");
+
+  fotoTemp = null;
+  document.getElementById("editNome").value = user;
+  document.getElementById("fotoInput").value = "";
+  document.getElementById("fotoPreview").innerHTML = avatarHtml(user, foto);
+
+  document.getElementById("overlay").style.display = "block";
+  document.getElementById("modal").style.display = "block";
+}
+
+function fecharEditar() {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("modal").style.display = "none";
+}
+
+// lê a imagem escolhida e mostra a prévia
+function previewFoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Selecione um arquivo de imagem.");
+    input.value = "";
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    alert("Imagem muito grande. Escolha uma de até 2MB.");
+    input.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    fotoTemp = e.target.result;
+    document.getElementById("fotoPreview").innerHTML = `<img src="${fotoTemp}" alt="Prévia">`;
+  };
+  reader.readAsDataURL(file);
+}
+
+// remove a foto (volta para a inicial do nome)
+function removerFoto() {
+  fotoTemp = "";
+  const nome = document.getElementById("editNome").value.trim() || "?";
+  document.getElementById("fotoPreview").innerHTML = escapar(nome.charAt(0));
+}
+
+// salva nome e foto
+function salvarPerfil() {
+  const novoNome = document.getElementById("editNome").value.trim();
+  if (!novoNome) {
+    alert("Digite um nome.");
+    return;
+  }
+
+  const antigo = localStorage.getItem("usuario");
+
+  // se o nome mudou, mantém o login funcionando renomeando o cadastro
+  if (novoNome !== antigo) {
+    try {
+      const cad = JSON.parse(localStorage.getItem("cadastros")) || {};
+      if (cad[antigo] !== undefined && cad[novoNome] === undefined) {
+        cad[novoNome] = cad[antigo];
+        delete cad[antigo];
+        localStorage.setItem("cadastros", JSON.stringify(cad));
+      }
+    } catch {}
+    localStorage.setItem("usuario", novoNome);
+  }
+
+  // fotoTemp === null → não mexeu; "" → removeu; string → nova foto
+  if (fotoTemp === "") {
+    localStorage.removeItem("foto");
+  } else if (fotoTemp) {
+    try {
+      localStorage.setItem("foto", fotoTemp);
+    } catch {
+      alert("Não foi possível salvar a foto (muito grande).");
+    }
+  }
+
+  fecharEditar();
+  renderPerfil();
+  iniciarCronometro();
+}
+
+/* ===== CRONÔMETRO DE SESSÃO ===== */
+let cronometroTimer = null;
+
+function formatarTempo(ms) {
+  const total = Math.floor(ms / 1000);
+  const h = String(Math.floor(total / 3600)).padStart(2, "0");
+  const m = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
+  const s = String(total % 60).padStart(2, "0");
+  return `${h}:${m}:${s}`;
+}
+
+function iniciarCronometro() {
+  let loginTime = Number(localStorage.getItem("loginTime"));
+  if (!loginTime) {
+    loginTime = Date.now();
+    localStorage.setItem("loginTime", String(loginTime));
+  }
+
+  const el = document.getElementById("cronometro");
+  if (!el) return;
+
+  const atualizar = () => { el.textContent = formatarTempo(Date.now() - loginTime); };
+
+  if (cronometroTimer) clearInterval(cronometroTimer);
+  atualizar();
+  cronometroTimer = setInterval(() => {
+    const alvo = document.getElementById("cronometro");
+    if (!alvo) { clearInterval(cronometroTimer); return; }
+    alvo.textContent = formatarTempo(Date.now() - loginTime);
+  }, 1000);
+}
+
+// 🚪 logout
+function logout() {
+  if (!confirm("Deseja sair?")) return;
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+
+// ⌨️ fecha o modal com Esc
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") fecharEditar();
+});
+
+// 🔒 proteção de acesso
+window.onload = function () {
+  const user = localStorage.getItem("usuario");
+  const tipo = localStorage.getItem("tipo");
+
+  if (!user || !tipo) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  renderPerfil();
+  iniciarCronometro();
+};
+</script>
+
+</body>
+</html>
