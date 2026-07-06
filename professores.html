@@ -16,6 +16,9 @@
       --escuro: #0f172a;
       --medio: #1e3a8a;
       --vidro: rgba(255, 255, 255, 0.07);
+      --verde: #4ade80;
+      --amarelo: #fbbf24;
+      --vermelho: #f87171;
     }
 
     * { box-sizing: border-box; }
@@ -49,8 +52,15 @@
     .pagina h1 {
       color: var(--dourado);
       text-align: center;
+      margin-bottom: 8px;
+    }
+    .aviso-admin {
+      text-align: center;
+      font-size: 13px;
+      color: #cbd5e1;
       margin-bottom: 18px;
     }
+    .aviso-admin b { color: var(--dourado); }
 
     /* BUSCA */
     .busca {
@@ -108,6 +118,7 @@
     .btn-prof {
       display: block;
       width: 100%;
+      margin-top: 8px;
       padding: 10px;
       border: none;
       border-radius: 10px;
@@ -118,16 +129,17 @@
       transition: opacity 0.2s;
     }
     .btn-prof:hover { opacity: 0.85; }
+    .btn-hist { background: #334155; }
 
-    /* INFO expansível com animação */
-    .info-prof {
+    /* SEÇÃO EXPANSÍVEL com animação */
+    .expansivel {
       display: grid;
       grid-template-rows: 0fr;
       transition: grid-template-rows 0.3s ease;
       text-align: left;
     }
-    .info-prof.aberta { grid-template-rows: 1fr; }
-    .info-prof > div { overflow: hidden; }
+    .expansivel.aberta { grid-template-rows: 1fr; }
+    .expansivel > div { overflow: hidden; }
     .info-prof p {
       margin: 12px 4px 0;
       padding: 12px;
@@ -136,6 +148,70 @@
       line-height: 1.7;
       font-size: 14px;
     }
+
+    /* HISTÓRICO DE CONDUTA */
+    .hist-lista { margin: 12px 4px 0; }
+    .hist-item {
+      background: rgba(0, 0, 0, 0.25);
+      border-left: 4px solid #64748b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .hist-item.positivo { border-left-color: var(--verde); }
+    .hist-item.observacao { border-left-color: var(--amarelo); }
+    .hist-item.advertencia { border-left-color: var(--vermelho); }
+    .hist-item .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .hist-tag {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 20px;
+      color: var(--escuro);
+    }
+    .hist-tag.positivo { background: var(--verde); }
+    .hist-tag.observacao { background: var(--amarelo); }
+    .hist-tag.advertencia { background: var(--vermelho); }
+    .hist-item .data { font-size: 11px; color: #94a3b8; }
+    .hist-vazio { color: #94a3b8; font-size: 13px; padding: 6px 4px; }
+
+    /* FORM ADMIN */
+    .form-conduta {
+      margin: 10px 4px 0;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed rgba(255, 214, 0, 0.4);
+      border-radius: 10px;
+    }
+    .form-conduta select,
+    .form-conduta input {
+      width: 100%;
+      padding: 9px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      color: #0f172a;
+    }
+    .form-conduta button {
+      width: 100%;
+      padding: 9px;
+      border: none;
+      border-radius: 8px;
+      background: var(--verde);
+      color: var(--escuro);
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .form-conduta button:hover { opacity: 0.85; }
 
     .sem-resultado {
       grid-column: 1 / -1;
@@ -155,6 +231,7 @@
   <section class="pagina">
 
     <h1>👩‍🏫 Professores</h1>
+    <p class="aviso-admin" id="avisoAdmin"></p>
 
     <input id="busca" class="busca" type="search"
            placeholder="🔎 Buscar por nome ou matéria..."
@@ -170,8 +247,16 @@
     const CAPA_PADRAO =
       "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='110'%3E%3Crect width='100%25' height='100%25' fill='%23334155'/%3E%3Ctext x='50%25' y='50%25' fill='%23ffd600' font-size='40' text-anchor='middle' dominant-baseline='middle'%3E👤%3C/text%3E%3C/svg%3E";
 
+    // rótulo amigável de cada tipo de registro
+    const TIPOS = {
+      positivo: "👍 Elogio",
+      observacao: "📝 Observação",
+      advertencia: "⚠️ Advertência",
+    };
+
     const PROFESSORES = [
       {
+        id: "prof1",
         foto: "img/prof1.jpg",
         nome: "Professora Elizabete Teles dos Santos Pereira",
         materia: "Matemática",
@@ -180,8 +265,14 @@
           "🕒 Aula: 08:00 às 12:00",
           "🎓 10 anos de experiência",
         ],
+        // histórico inicial de conduta na escola
+        historicoPadrao: [
+          { data: "10/03/2026", tipo: "positivo", texto: "Projeto de reforço em matemática elogiado pela direção." },
+          { data: "22/05/2026", tipo: "observacao", texto: "Solicitou material extra para a turma do 8º ano." },
+        ],
       },
       {
+        id: "prof2",
         foto: "img/prof2.jpg",
         nome: "Professor Leonardo Augusto Lepre",
         materia: "Português",
@@ -189,6 +280,9 @@
           "📖 Professor de Português",
           "🕒 Aula: 13:00 às 17:00",
           "🎓 Especialista em Literatura",
+        ],
+        historicoPadrao: [
+          { data: "15/04/2026", tipo: "positivo", texto: "Organizou a feira literária da escola." },
         ],
       },
     ];
@@ -199,8 +293,101 @@
       return d.innerHTML;
     }
 
+    function ehAdmin() {
+      return localStorage.getItem("tipo") === "admin";
+    }
+
+    /* ===== HISTÓRICO (localStorage) ===== */
+    function getHistoricos() {
+      let dados;
+      try { dados = JSON.parse(localStorage.getItem("historicoProfs")); }
+      catch { dados = null; }
+
+      if (!dados) {
+        dados = {};
+        PROFESSORES.forEach((p) => { dados[p.id] = p.historicoPadrao.slice(); });
+        localStorage.setItem("historicoProfs", JSON.stringify(dados));
+      }
+      return dados;
+    }
+
+    function getHistorico(id) {
+      const dados = getHistoricos();
+      return Array.isArray(dados[id]) ? dados[id] : [];
+    }
+
+    // admin adiciona um registro de conduta
+    function addConduta(id) {
+      if (!ehAdmin()) {
+        alert("Apenas o administrador pode adicionar registros.");
+        return;
+      }
+
+      const tipo = document.getElementById("tipo-" + id).value;
+      const texto = document.getElementById("texto-" + id).value.trim();
+
+      if (!texto) {
+        alert("Descreva o registro de conduta.");
+        return;
+      }
+
+      const dados = getHistoricos();
+      if (!Array.isArray(dados[id])) dados[id] = [];
+      dados[id].push({
+        data: new Date().toLocaleDateString("pt-BR"),
+        tipo,
+        texto,
+      });
+      localStorage.setItem("historicoProfs", JSON.stringify(dados));
+
+      render(document.getElementById("busca").value);
+      // reabre o histórico do professor editado
+      const bloco = document.getElementById("hist-" + id);
+      if (bloco) bloco.classList.add("aberta");
+    }
+
+    /* ===== HTML DO HISTÓRICO ===== */
+    function historicoHtml(id) {
+      const registros = getHistorico(id);
+
+      let lista = registros.length
+        ? registros.map((r) => {
+            const tipo = TIPOS[r.tipo] ? r.tipo : "observacao";
+            return `
+              <div class="hist-item ${tipo}">
+                <div class="topo">
+                  <span class="hist-tag ${tipo}">${escapar(TIPOS[tipo])}</span>
+                  <span class="data">${escapar(r.data)}</span>
+                </div>
+                <div>${escapar(r.texto)}</div>
+              </div>`;
+          }).join("")
+        : `<p class="hist-vazio">Nenhum registro de conduta ainda.</p>`;
+
+      // formulário só aparece para admin
+      const form = ehAdmin()
+        ? `
+          <div class="form-conduta">
+            <select id="tipo-${id}">
+              <option value="positivo">👍 Elogio</option>
+              <option value="observacao">📝 Observação</option>
+              <option value="advertencia">⚠️ Advertência</option>
+            </select>
+            <input id="texto-${id}" type="text" maxlength="120" placeholder="Descreva o registro...">
+            <button onclick="addConduta('${id}')">➕ Adicionar registro</button>
+          </div>`
+        : "";
+
+      return `<div class="hist-lista">${lista}${form}</div>`;
+    }
+
+    /* ===== RENDER ===== */
     function render(filtro = "") {
       const termo = filtro.trim().toLowerCase();
+
+      document.getElementById("avisoAdmin").innerHTML = ehAdmin()
+        ? "Você está como <b>administrador</b> — pode adicionar registros de conduta."
+        : "Entre como administrador para adicionar registros de conduta.";
 
       const lista = PROFESSORES.filter(
         (p) =>
@@ -215,7 +402,7 @@
       }
 
       document.getElementById("cards").innerHTML = lista
-        .map((p, i) => {
+        .map((p) => {
           const infoHtml = p.info.map((linha) => escapar(linha)).join("<br>");
           return `
             <div class="prof-card">
@@ -223,20 +410,30 @@
                    onerror="this.src='${CAPA_PADRAO}'">
               <h2>${escapar(p.nome)}</h2>
               <span class="materia">${escapar(p.materia)}</span>
+
               <button class="btn-prof" aria-expanded="false"
-                      onclick="alternar(this, 'info${i}')">Ver Informações</button>
-              <div class="info-prof" id="info${i}"><div><p>${infoHtml}</p></div></div>
+                      onclick="alternar(this, 'info-${p.id}')">Ver Informações</button>
+              <div class="expansivel info-prof" id="info-${p.id}"><div><p>${infoHtml}</p></div></div>
+
+              <button class="btn-prof btn-hist" aria-expanded="false"
+                      onclick="alternar(this, 'hist-${p.id}')">📋 Histórico de conduta</button>
+              <div class="expansivel" id="hist-${p.id}"><div>${historicoHtml(p.id)}</div></div>
             </div>`;
         })
         .join("");
     }
 
-    // abre/fecha as informações do professor
+    // abre/fecha uma seção expansível
     function alternar(botao, id) {
-      const info = document.getElementById(id);
-      const aberta = info.classList.toggle("aberta");
-      botao.textContent = aberta ? "Ocultar Informações" : "Ver Informações";
+      const bloco = document.getElementById(id);
+      const aberta = bloco.classList.toggle("aberta");
       botao.setAttribute("aria-expanded", String(aberta));
+
+      if (botao.classList.contains("btn-hist")) {
+        botao.textContent = aberta ? "📋 Ocultar histórico" : "📋 Histórico de conduta";
+      } else {
+        botao.textContent = aberta ? "Ocultar Informações" : "Ver Informações";
+      }
     }
 
     window.onload = () => render();
