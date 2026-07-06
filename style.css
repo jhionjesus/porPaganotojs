@@ -1,848 +1,999 @@
-/* ==================================================
-   RESET
-================================================== */
+/* ============================================================
+   ESCOLA / BIBLIOTECA - FOLHA DE ESTILO ORGANIZADA
+   ------------------------------------------------------------
+   Índice:
+     01. Variáveis (:root)
+     02. Reset & Base
+     03. Acessibilidade
+     04. Topo / Cabeçalho
+     05. Logo
+     06. Menu / Navegação
+     07. Home (main / texto / botão)
+     08. Cards de conteúdo (apresentação / sobre)
+     09. Páginas genéricas
+     10. Calendário
+     11. Professores
+     12. Contato
+     13. Formulários
+     14. Login / Tela inicial
+     15. Admin
+     16. Livros
+     17. Botão Voltar
+     18. Animações
+     19. Responsivo
+   ============================================================ */
 
-*{
+
+/* ============================================================
+   01. VARIÁVEIS
+   ============================================================ */
+   :root {
+    --dourado: #ffd54a;
+    --dourado-forte: #ffce38;
+    --azul: #1565c0;
+    --azul-escuro: #0f172a;
+    --azul-medio: #1e3a8a;
+    --vidro: rgba(255, 255, 255, 0.08);
+    --vidro-borda: rgba(255, 255, 255, 0.18);
+    --verde: #4ade80;
+    --vermelho: #ff6b6b;
+    --texto-suave: #e2e8f0;
+    --raio: 14px;
+}
+
+
+/* ============================================================
+   02. RESET & BASE
+   ============================================================ */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
-body{
-    background: linear-gradient(to right, #0d1b2a, #1b263b);
+body {
+    background: linear-gradient(135deg, var(--azul-escuro), var(--azul-medio));
+    background-attachment: fixed;
     color: white;
+    min-height: 100vh;
 }
 
-/* ==================================================
-   TOPO
-================================================== */
 
-.topo{
-    background: rgba(5, 15, 35, 0.95);
+/* ============================================================
+   03. ACESSIBILIDADE
+   ============================================================ */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 
+.skip-link {
+    position: absolute;
+    left: -999px;
+    top: 0;
+    background: var(--dourado);
+    color: #000;
+    padding: 10px 16px;
+    border-radius: 0 0 var(--raio) 0;
+    font-weight: bold;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    left: 0;
+}
+
+:focus-visible {
+    outline: 3px solid var(--dourado);
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   04. TOPO / CABEÇALHO
+   ============================================================ */
+.topo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 20px 50px;
-
+    background: rgba(5, 15, 35, 0.95);
     border-bottom: 3px solid #ffd600;
-
     position: sticky;
     top: 0;
-
     z-index: 1000;
 }
 
-/* ==================================================
-   LOGO
-================================================== */
 
-.logo-area{
+/* ============================================================
+   05. LOGO
+   ============================================================ */
+.logo-area {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.logo-area img{
+.logo-area img {
     width: 75px;
     height: 75px;
-
     border-radius: 50%;
-
     cursor: pointer;
-
     transition: 0.4s;
 }
 
-.logo-area img:hover{
+.logo-area img:hover {
     transform: scale(1.1) rotate(5deg);
-
-    box-shadow: 0px 0px 20px #ffd600;
+    box-shadow: 0 0 20px #ffd600;
 }
 
-.logo-area span{
+.logo-area span {
     color: #ffd600;
-
     font-size: 36px;
     font-weight: bold;
 }
 
-/* ==================================================
-   MENU
-================================================== */
 
-nav{
+/* ============================================================
+   06. MENU / NAVEGAÇÃO
+   ============================================================ */
+nav {
     display: flex;
-    gap: 35px;
-}
-
-nav a{
-    color: white;
-
-    text-decoration: none;
-
-    font-size: 20px;
-    font-weight: bold;
-
-    position: relative;
-
-    transition: 0.3s;
-}
-
-nav a::after{
-    content: "";
-
-    width: 0%;
-    height: 3px;
-
-    background: #ffd600;
-
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-
-    transition: 0.4s;
-}
-
-nav a:hover{
-    color: #ffd600;
-}
-
-nav a:hover::after{
-    width: 100%;
-}
-
-/* ==================================================
-   MAIN
-================================================== */
-
-.main{
-    display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-
-    gap: 60px;
-
-    padding: 70px 50px;
-
+    gap: 15px;
+    padding: 15px 30px;
+    background: var(--vidro);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--dourado);
     flex-wrap: wrap;
 }
 
-/* ==================================================
-   TEXTO PRINCIPAL
-================================================== */
-
-.main-texto{
-    max-width: 500px;
+.nav-links,
+.nav-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.main-texto h1{
-    font-size: 75px;
-    line-height: 85px;
+nav a {
+    color: var(--dourado);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+    position: relative;
+    padding: 4px 2px;
+    transition: 0.3s;
+}
 
-    margin-bottom: 10px;
+nav a::after {
+    content: "";
+    width: 0%;
+    height: 3px;
+    background: #ffd600;
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    transition: 0.4s;
+}
 
+nav a:hover,
+nav a:focus-visible {
     color: white;
 }
 
-.main-texto p{
-    color: #d4d4d4;
+nav a:hover::after {
+    width: 100%;
+}
 
+nav a[aria-current="page"] {
+    color: white;
+    border-bottom: 2px solid var(--dourado);
+}
+
+
+/* ============================================================
+   07. HOME (main / texto / botão)
+   ============================================================ */
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 70px 50px;
+    flex-wrap: wrap;
+}
+
+.main-texto {
+    max-width: 500px;
+}
+
+.main-texto h1 {
+    color: white;
+    font-size: 75px;
+    line-height: 85px;
+    margin-bottom: 10px;
+}
+
+.main-texto p {
+    color: #d4d4d4;
     font-size: 23px;
     line-height: 35px;
 }
 
-/* ==================================================
-   LINHA
-================================================== */
-
-.linha{
+.linha {
     width: 130px;
     height: 6px;
-
     background: #ffd600;
-
     border-radius: 10px;
-
     margin: 25px 0;
-
-    box-shadow: 0px 0px 15px #ffd600;
+    box-shadow: 0 0 15px #ffd600;
 }
 
-/* ==================================================
-   BOTÃO
-================================================== */
-
-.botao{
+.botao {
     display: inline-block;
-
     margin-top: 35px;
     padding: 18px 38px;
-
     background: #1565c0;
     color: white;
-
     text-decoration: none;
-
+    border: 2px solid #ffd600;
     border-radius: 15px;
-
     font-size: 22px;
     font-weight: bold;
-
-    border: 2px solid #ffd600;
-
-    box-shadow: 0px 0px 20px rgba(21,101,192,0.6);
-
+    box-shadow: 0 0 20px rgba(21, 101, 192, 0.6);
     transition: 0.4s;
 }
 
-.botao:hover{
+.botao:hover {
     transform: scale(1.08);
-
     background: #ffd600;
     color: #0d1b2a;
 }
 
-/* ==================================================
-   CARD APRESENTAÇÃO
-================================================== */
 
-.apresentacao{
+/* ============================================================
+   08. CARDS DE CONTEÚDO (apresentação / sobre)
+   ============================================================ */
+.apresentacao {
     width: 470px;
-
     background: #1e2a3a;
-
     padding: 22px;
-
     border-radius: 30px;
-
-    border: 2px solid rgba(255,214,0,0.2);
-
-    box-shadow: 0px 0px 20px rgba(255,214,0,0.1);
-
+    border: 2px solid rgba(255, 214, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 214, 0, 0.1);
     transition: 0.4s;
 }
 
-.apresentacao:hover{
+.apresentacao:hover {
     transform: translateY(-10px);
-
-    box-shadow: 0px 0px 30px rgba(255,214,0,0.4);
+    box-shadow: 0 0 30px rgba(255, 214, 0, 0.4);
 }
 
-.apresentacao img{
+.apresentacao img {
     width: 100%;
-
     border-radius: 20px;
-
     transition: 0.4s;
 }
 
-.apresentacao img:hover{
+.apresentacao img:hover {
     transform: scale(1.02);
 }
 
-.apresentacao h2{
+.apresentacao h2 {
     color: #ffd600;
-
     margin-top: 15px;
-
     font-size: 42px;
 }
 
-.apresentacao p{
+.apresentacao p {
     color: #ddd;
-
     font-size: 20px;
 }
 
-/* ==================================================
-   CARD SOBRE
-================================================== */
-
-.texto{
+.texto {
     width: 330px;
-
     background: #1e2a3a;
-
     padding: 30px;
-
     border-radius: 30px;
-
-    border: 2px solid rgba(255,214,0,0.2);
-
-    box-shadow: 0px 0px 20px rgba(255,214,0,0.1);
-
+    border: 2px solid rgba(255, 214, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 214, 0, 0.1);
     transition: 0.4s;
 }
 
-.texto:hover{
+.texto:hover {
     transform: scale(1.04);
-
-    box-shadow: 0px 0px 30px rgba(255,214,0,0.4);
+    box-shadow: 0 0 30px rgba(255, 214, 0, 0.4);
 }
 
-.texto h2{
+.texto h2 {
     color: #ffd600;
-
     font-size: 42px;
-
     margin-bottom: 20px;
 }
 
-.texto p{
+.texto p {
     color: #ddd;
-
     font-size: 20px;
     line-height: 35px;
 }
 
-.texto img{
+.texto img {
     width: 100%;
-
     margin-top: 20px;
-
     border-radius: 20px;
-
     transition: 0.4s;
 }
 
-.texto img:hover{
+.texto img:hover {
     transform: scale(1.03);
 }
 
-/* ==================================================
-   PÁGINAS
-================================================== */
 
-.pagina{
-    padding: 60px;
-
+/* ============================================================
+   09. PÁGINAS GENÉRICAS
+   ============================================================ */
+.pagina {
+    padding: 80px 20px;
     text-align: center;
 }
 
-.pagina h1{
+.pagina h1 {
     color: #ffd600;
-
     font-size: 60px;
-
     margin-bottom: 50px;
 }
 
-/* ==================================================
-   CARDS
-================================================== */
-
-.cards{
+.cards {
     display: flex;
     justify-content: center;
-
     gap: 40px;
-
     flex-wrap: wrap;
 }
 
-/* ==================================================
-   CALENDÁRIO
-================================================== */
 
-.card-calendario{
+/* ============================================================
+   10. CALENDÁRIO
+   ============================================================ */
+.card-calendario {
     width: 300px;
-
     background: #1e2a3a;
-
     padding: 30px;
-
     border-radius: 25px;
-
-    border: 2px solid rgba(255,214,0,0.2);
-
-    box-shadow: 0px 0px 20px rgba(255,214,0,0.1);
-
+    border: 2px solid rgba(255, 214, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 214, 0, 0.1);
     transition: 0.4s;
 }
 
-.card-calendario:hover{
+.card-calendario:hover {
     transform: translateY(-10px);
-
-    box-shadow: 0px 0px 25px rgba(255,214,0,0.5);
+    box-shadow: 0 0 25px rgba(255, 214, 0, 0.5);
 }
 
-.card-calendario h2{
+.card-calendario h2 {
     color: #ffd600;
-
     margin-bottom: 20px;
-
     font-size: 30px;
 }
 
-.card-calendario p{
+.card-calendario p {
     color: #ddd;
-
     font-size: 22px;
 }
 
-/* ==================================================
-   PROFESSORES
-================================================== */
 
-.prof-card{
-    width: 300px;
-
+/* ============================================================
+   11. PROFESSORES
+   ============================================================ */
+.prof-card {
+    width: 320px;
     background: #1e2a3a;
-
     padding: 25px;
-
     border-radius: 25px;
-
-    border: 2px solid rgba(255,214,0,0.2);
-
-    box-shadow: 0px 0px 20px rgba(255,214,0,0.1);
-
+    border: 2px solid rgba(255, 214, 0, 0.2);
     transition: 0.4s;
 }
 
-.prof-card:hover{
-    transform: scale(1.05);
-
-    box-shadow: 0px 0px 25px rgba(255,214,0,0.5);
+.prof-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 25px rgba(255, 214, 0, 0.4);
 }
 
-.prof-card img{
+.prof-card img {
     width: 100%;
     height: 250px;
-
     object-fit: cover;
-
     border-radius: 20px;
 }
 
-.prof-card h2{
+.prof-card h2 {
     color: #ffd600;
-
     margin-top: 15px;
-
     font-size: 30px;
 }
 
-.prof-card p{
+.prof-card p {
     color: #ddd;
-
     margin-top: 10px;
-
-    font-size: 22px;
+    font-size: 20px;
 }
 
-/* ==================================================
-   BOTÃO PROFESSOR
-================================================== */
-
-.btn-prof{
+.btn-prof {
     width: 100%;
-
-    margin-top: 15px;
-
+    margin-top: 20px;
     padding: 14px;
-
-    border: none;
-
-    border-radius: 12px;
-
     background: #1565c0;
-
     color: white;
-
+    border: 2px solid #ffd600;
+    border-radius: 12px;
     font-size: 18px;
     font-weight: bold;
-
     cursor: pointer;
-
-    border: 2px solid #ffd600;
-
     transition: 0.4s;
 }
 
-.btn-prof:hover{
+.btn-prof:hover {
     background: #ffd600;
-
     color: #0d1b2a;
-
-    transform: scale(1.03);
 }
 
-/* ==================================================
-   INFO PROFESSOR
-================================================== */
-
-.info-prof{
+.info-prof {
     display: none;
-
     margin-top: 15px;
-
     padding: 15px;
-
-    background: rgba(255,255,255,0.05);
-
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
-
     color: #ddd;
-
     line-height: 30px;
-
     animation: aparecer 0.4s;
 }
 
-/* ==================================================
-   CONTATO
-================================================== */
 
-.contato-container{
+/* ============================================================
+   12. CONTATO
+   ============================================================ */
+.contato-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-
-    padding: 80px 20px;
+    padding: 40px;
 }
 
-.contato-card{
-    width: 900px;
-
-    background: linear-gradient(145deg,#1b263b,#243447);
-
-    padding: 50px;
-
-    border-radius: 35px;
-
-    border: 2px solid rgba(255,214,0,0.2);
-
-    box-shadow:
-    0px 0px 25px rgba(255,214,0,0.2),
-    0px 0px 50px rgba(255,214,0,0.1);
-
-    transition: 0.4s;
+.contato-card {
+    width: 850px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 20px;
 }
 
-.contato-card:hover{
+.contato-card:hover {
     transform: translateY(-10px);
-
     box-shadow:
-    0px 0px 35px rgba(255,214,0,0.5),
-    0px 0px 60px rgba(255,214,0,0.2);
+        0 0 35px rgba(255, 214, 0, 0.5),
+        0 0 60px rgba(255, 214, 0, 0.2);
 }
 
-.contato-card h1{
+.contato-card h1 {
     color: #ffd600;
-
     text-align: center;
-
     font-size: 80px;
-
     margin-bottom: 20px;
 }
 
-.descricao{
+.descricao {
     text-align: center;
-
     color: #ddd;
-
     font-size: 28px;
-
     margin-bottom: 50px;
 }
 
-/* ==================================================
-   INFORMAÇÕES
-================================================== */
-
-.info{
+/* ATENÇÃO: a classe .info é usada em DOIS contextos diferentes
+   (grade do contato e linha de status do livro). Veja a seção 16. */
+.info {
     display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
 }
 
-.item{
-    background: rgba(255,255,255,0.04);
-
-    padding: 25px;
-
-    border-radius: 20px;
-
-    border: 1px solid rgba(255,255,255,0.05);
-
+.item {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     transition: 0.4s;
 }
 
-.item:hover{
+.item:hover {
     transform: scale(1.03);
-
-    background: rgba(255,214,0,0.08);
-
-    box-shadow: 0px 0px 20px rgba(255,214,0,0.2);
+    background: rgba(255, 214, 0, 0.08);
+    box-shadow: 0 0 20px rgba(255, 214, 0, 0.2);
 }
 
-.item h2{
+.item h2 {
     color: #ffd600;
-
     font-size: 30px;
-
     margin-bottom: 15px;
 }
 
-.item p{
+.item p {
     color: #eee;
-
     font-size: 22px;
     line-height: 35px;
 }
 
-/* ==================================================
-   BOTÃO VOLTAR
-================================================== */
 
-.voltar{
-    position: fixed;
+/* ============================================================
+   13. FORMULÁRIOS
+   ============================================================ */
+.contato-card form {
+    margin-top: 30px;
+    padding: 25px;
+    background: #162233;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 214, 0, 0.2);
+}
 
-    top: 20px;
-    left: 20px;
+.contato-card form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #ffd600;
+    font-weight: bold;
+}
 
+.contato-card form input,
+.contato-card form select,
+.contato-card form textarea {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 2px solid #284766;
+    background: #0d1b2a;
+    color: white;
+}
+
+.contato-card form input:focus,
+.contato-card form select:focus,
+.contato-card form textarea:focus {
+    border-color: #ffd600;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 214, 0, 0.4);
+}
+
+.contato-card form button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
     background: #1565c0;
     color: white;
-
-    padding: 14px 24px;
-
-    border-radius: 14px;
-
-    text-decoration: none;
-
-    font-size: 19px;
+    font-size: 18px;
     font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
+.contato-card form button:hover {
+    background: #ffd600;
+    color: #0d1b2a;
+    transform: scale(1.03);
+}
+
+/* Campos e botões genéricos (fora de .contato-card form) */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+textarea {
+    min-height: 120px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #22c55e;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   14. LOGIN / TELA INICIAL
+   ============================================================ */
+#loginBox {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    background: #1e2a3a;
+    padding: 25px;
+    border-radius: 15px;
     border: 2px solid #ffd600;
-
-    box-shadow: 0px 0px 15px rgba(21,101,192,0.5);
-
-    transition: 0.4s;
-
+    text-align: center;
     z-index: 9999;
 }
 
-.voltar:hover{
-    transform: scale(1.08);
+#loginBox input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
 
+#loginBox button {
+    width: 100%;
+    padding: 10px;
+    background: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#telaLogin {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+.boxLogin {
+    width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #ffd600;
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.boxLogin h1 {
+    margin-bottom: 10px;
+    color: #ffd600;
+}
+
+.boxLogin input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+}
+
+.boxLogin button {
+    width: 100%;
+    padding: 12px;
+    background: #1565c0;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+/* ============================================================
+   15. ADMIN
+   ============================================================ */
+#painelAdmin {
+    margin-top: 30px;
+    display: none;
+}
+
+.adminBox {
+    background: var(--vidro);
+    padding: 22px;
+    border-radius: var(--raio);
+    border: 1px solid var(--vidro-borda);
+    margin-bottom: 25px;
+}
+
+.critica {
+    background: #243447;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.form-erro {
+    color: var(--vermelho);
+    font-weight: 600;
+    margin-top: 10px;
+    min-height: 1em;
+}
+
+
+/* ============================================================
+   16. LIVROS
+   ============================================================ */
+.painel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.painel .campo {
+    flex-direction: row;
+    align-items: center;
+}
+
+#pesquisa {
+    width: min(320px, 70vw);
+}
+
+.contador {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--dourado);
+    margin-left: auto;
+}
+
+.livros,
+.lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Cartão de livro (tema escuro/vidro da Biblioteca) */
+.livro {
+    width: 260px;
+    background: var(--vidro);
+    border: 1px solid var(--dourado);
+    border-radius: var(--raio);
+    padding: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.livro:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 20px rgba(255, 213, 74, 0.45);
+}
+
+.livro img {
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid var(--dourado);
+    margin: 0 auto 12px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.livro h3 {
+    color: var(--dourado);
+    margin-bottom: 6px;
+}
+
+.autor {
+    color: var(--texto-suave);
+    font-style: italic;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.status {
+    font-weight: bold;
+}
+
+.statusLivre {
+    color: var(--verde);
+}
+
+.statusAlugado {
+    color: var(--vermelho);
+}
+
+.acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.vazio {
+    text-align: center;
+    color: var(--texto-suave);
+    font-size: 1.1rem;
+    padding: 40px 0;
+}
+
+/* --- Botões da Biblioteca --- */
+.btn {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: transform 0.15s, opacity 0.2s, background 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.92;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-primary {
+    background: var(--azul);
+    color: white;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--dourado);
+    border: 1px solid var(--dourado);
+}
+
+.btn-ghost[aria-pressed="true"] {
+    background: var(--dourado);
+    color: #000;
+}
+
+.btn-acao {
+    width: 100%;
+    background: var(--azul);
+    color: white;
+}
+
+.btn-devolver {
+    background: #6d28d9;
+}
+
+.btn-remover {
+    background: transparent;
+    color: var(--vermelho);
+    border: 1px solid var(--vermelho);
+}
+
+.admin-only {
+    display: none;
+}
+
+body.is-admin .admin-only {
+    display: block;
+}
+
+
+/* ============================================================
+   17. BOTÃO VOLTAR
+   ============================================================ */
+.voltar {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: white;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    z-index: 9999;
+}
+
+.voltar:hover {
+    transform: scale(1.08);
     background: #ffd600;
     color: #0d1b2a;
 }
 
-/* ==================================================
-   ANIMAÇÃO
-================================================== */
 
-@keyframes aparecer{
-
-    from{
+/* ============================================================
+   18. ANIMAÇÕES
+   ============================================================ */
+@keyframes aparecer {
+    from {
         opacity: 0;
         transform: translateY(-10px);
     }
-
-    to{
+    to {
         opacity: 1;
-        transform: translateY(0px);
+        transform: translateY(0);
     }
 }
 
-/* ==================================================
-   RESPONSIVO
-================================================== */
 
-@media(max-width: 1200px){
-
-    .main{
+/* ============================================================
+   19. RESPONSIVO
+   ============================================================ */
+@media (max-width: 1200px) {
+    .main {
         flex-direction: column;
-
         text-align: center;
     }
-
-    .main-texto h1{
+    .main-texto h1 {
         font-size: 55px;
         line-height: 65px;
     }
-
-    .topo{
+    .topo {
         flex-direction: column;
-
         gap: 20px;
     }
-
-    nav{
+    nav {
         flex-wrap: wrap;
-
         justify-content: center;
     }
 }
 
-@media(max-width: 900px){
-
-    .contato-card{
+@media (max-width: 900px) {
+    .contato-card {
         width: 95%;
-
         padding: 30px;
     }
-
-    .contato-card h1{
+    .contato-card h1 {
         font-size: 55px;
     }
-
-    .descricao{
+    .descricao {
         font-size: 22px;
     }
-
-    .info{
+    .info {
         grid-template-columns: 1fr;
     }
 }
-/* PÁGINA */
 
-.pagina{
-    padding: 80px 20px;
-
-    text-align: center;
-}
-
-.pagina h1{
-    color: #ffd600;
-
-    font-size: 60px;
-
-    margin-bottom: 50px;
-}
-
-/* CARDS */
-
-.cards{
-    display: flex;
-
-    justify-content: center;
-
-    gap: 40px;
-
-    flex-wrap: wrap;
-}
-
-/* CARD PROFESSOR */
-
-.prof-card{
-    width: 320px;
-
-    background: #1e2a3a;
-
-    padding: 25px;
-
-    border-radius: 25px;
-
-    border: 2px solid rgba(255,214,0,0.2);
-
-    transition: 0.4s;
-}
-
-.prof-card:hover{
-    transform: translateY(-10px);
-
-    box-shadow:
-    0px 0px 25px rgba(255,214,0,0.4);
-}
-
-.prof-card img{
-    width: 100%;
-
-    height: 250px;
-
-    object-fit: cover;
-
-    border-radius: 20px;
-}
-
-.prof-card h2{
-    color: #ffd600;
-
-    margin-top: 15px;
-
-    font-size: 30px;
-}
-
-.prof-card p{
-    color: #ddd;
-
-    margin-top: 10px;
-
-    font-size: 20px;
-}
-
-/* BOTÃO */
-
-.btn-prof{
-    width: 100%;
-
-    margin-top: 20px;
-
-    padding: 14px;
-
-    background: #1565c0;
-
-    color: white;
-
-    border: 2px solid #ffd600;
-
-    border-radius: 12px;
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-        transition: 0.4s;
+@media (max-width: 600px) {
+    main {
+        padding: 20px 16px;
     }
-
-    .btn-prof:hover{
-        background: #ffd600;
-
-        color: #0d1b2a;
+    nav {
+        padding: 12px 16px;
     }
-
-/* INFORMAÇÕES */
-
-.info-prof{
-    display: none;
-
-    margin-top: 15px;
-
-    padding: 15px;
-
-    background: rgba(255,255,255,0.05);
-
-    border-radius: 15px;
-
-    color: #ddd;
-
-    line-height: 30px;
-
-    animation: aparecer 0.4s;
+    .painel .campo {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .contador {
+        margin-left: 0;
+    }
 }
 
-/* ANIMAÇÃO */
-
-@keyframes aparecer{
-
-    from{
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to{
-        opacity: 1;
-        transform: translateY(0px);
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
     }
 }

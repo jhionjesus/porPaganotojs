@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boletim - Colégio Paganoto</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --dourado: #ffd600;
+      --azul: #1565c0;
+      --azul2: #42a5f5;
+      --escuro: #0f172a;
+      --medio: #1e3a8a;
+      --vidro: rgba(255, 255, 255, 0.07);
+      --verde: #4ade80;
+      --vermelho: #f87171;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, var(--escuro), var(--medio));
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--dourado);
+    }
+    nav a {
+      color: var(--dourado);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover { color: #fff; }
+    nav .sair { margin-left: auto; }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px 20px 50px;
+    }
+    h1 {
+      color: var(--dourado);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .subtitulo {
+      text-align: center;
+      color: #cbd5e1;
+      font-size: 14px;
+      margin-bottom: 26px;
+    }
+
+    .box {
+      background: var(--vidro);
+      border: 1px solid rgba(255, 214, 0, 0.35);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 22px;
+      backdrop-filter: blur(8px);
+    }
+    .box h2 { color: var(--dourado); margin: 0 0 14px; font-size: 19px; }
+
+    label { display: block; font-size: 13px; color: #cbd5e1; margin: 8px 0 4px; }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      color: #0f172a;
+    }
+    .linha-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    button {
+      padding: 11px 18px;
+      border: none;
+      border-radius: 8px;
+      background: var(--azul);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    button:hover { opacity: 0.85; }
+
+    /* TABELA DE NOTAS */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    th, td {
+      padding: 11px 10px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    th { color: var(--dourado); font-size: 13px; }
+    td .nota { font-weight: bold; }
+    td .nota.ok { color: var(--verde); }
+    td .nota.baixa { color: var(--vermelho); }
+    .acao-del {
+      background: var(--vermelho);
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .resumo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .resumo .media { font-size: 15px; }
+    .resumo .media b { font-size: 22px; color: var(--dourado); }
+    .situacao {
+      font-weight: bold;
+      padding: 6px 16px;
+      border-radius: 20px;
+      color: var(--escuro);
+    }
+    .situacao.aprovado { background: var(--verde); }
+    .situacao.recuperacao { background: var(--vermelho); }
+
+    .vazio { color: #94a3b8; text-align: center; padding: 16px; }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <a href="index.html">🏠 Início</a>
+  <a href="perfil.html">👤 Perfil</a>
+  <a href="livros.html">📚 Livros</a>
+  <a href="#" class="sair" onclick="logout()">🚪 Sair</a>
+</nav>
+
+<main>
+  <h1>📊 Boletim Escolar</h1>
+  <p class="subtitulo" id="subtitulo"></p>
+
+  <!-- área do professor/admin -->
+  <div class="box" id="areaGestor" style="display:none;">
+    <h2>Lançar nota</h2>
+
+    <label for="selAluno">Aluno</label>
+    <select id="selAluno" onchange="mostrarBoletim()"></select>
+
+    <div class="linha-form" style="margin-top:12px;">
+      <div>
+        <label for="selMateria">Matéria</label>
+        <select id="selMateria"></select>
+      </div>
+      <div>
+        <label for="inpNota">Nota (0 a 10)</label>
+        <input id="inpNota" type="number" min="0" max="10" step="0.1" placeholder="Ex: 8.5">
+      </div>
+      <button onclick="lancarNota()">➕ Lançar</button>
+    </div>
+  </div>
+
+  <!-- boletim exibido -->
+  <div class="box">
+    <h2 id="tituloBoletim">Notas</h2>
+    <div id="conteudoBoletim"></div>
+  </div>
+</main>
+
+<script>
+"use strict";
+
+const MATERIAS = [
+  "Matemática", "Português", "História", "Geografia",
+  "Ciências", "Inglês", "Educação Física", "Artes",
+];
+const MEDIA_APROVACAO = 6;
+
+function escapar(t) {
+  const d = document.createElement("div");
+  d.textContent = t ?? "";
+  return d.innerHTML;
+}
+
+function ehGestor() {
+  const t = localStorage.getItem("tipo");
+  return t === "admin" || t === "professor";
+}
+
+/* ===== DADOS ===== */
+function getBoletim() {
+  try { return JSON.parse(localStorage.getItem("boletim")) || {}; }
+  catch { return {}; }
+}
+function setBoletim(obj) {
+  localStorage.setItem("boletim", JSON.stringify(obj));
+}
+function lerCadastros() {
+  try { return JSON.parse(localStorage.getItem("cadastros")) || {}; }
+  catch { return {}; }
+}
+
+// lista de alunos conhecidos (cadastrados + padrão + quem já tem notas)
+function listaAlunos() {
+  const set = new Set();
+  Object.keys(lerCadastros()).forEach((n) => set.add(n));
+  set.add("Aluno");
+  Object.keys(getBoletim()).forEach((n) => set.add(n));
+  // não faz sentido lançar nota para admin/professor
+  set.delete("Admin");
+  set.delete("Professor");
+  return [...set].sort((a, b) => a.localeCompare(b, "pt-BR"));
+}
+
+/* ===== AÇÕES DO GESTOR ===== */
+function lancarNota() {
+  if (!ehGestor()) return;
+
+  const aluno = document.getElementById("selAluno").value;
+  const materia = document.getElementById("selMateria").value;
+  const nota = parseFloat(document.getElementById("inpNota").value);
+
+  if (!aluno) { alert("Selecione um aluno."); return; }
+  if (isNaN(nota) || nota < 0 || nota > 10) {
+    alert("Digite uma nota válida (0 a 10).");
+    return;
+  }
+
+  const bol = getBoletim();
+  if (!bol[aluno]) bol[aluno] = {};
+  bol[aluno][materia] = Math.round(nota * 10) / 10;
+  setBoletim(bol);
+
+  document.getElementById("inpNota").value = "";
+  mostrarBoletim();
+}
+
+function removerNota(aluno, materia) {
+  if (!ehGestor()) return;
+  if (!confirm(`Remover a nota de ${materia}?`)) return;
+
+  const bol = getBoletim();
+  if (bol[aluno]) {
+    delete bol[aluno][materia];
+    if (Object.keys(bol[aluno]).length === 0) delete bol[aluno];
+    setBoletim(bol);
+  }
+  mostrarBoletim();
+}
+
+/* ===== EXIBIÇÃO ===== */
+function mostrarBoletim() {
+  const gestor = ehGestor();
+  const aluno = gestor
+    ? document.getElementById("selAluno").value
+    : localStorage.getItem("usuario");
+
+  document.getElementById("tituloBoletim").textContent =
+    gestor ? `Notas de ${aluno || "—"}` : "Minhas notas";
+
+  const notas = getBoletim()[aluno] || {};
+  const materias = Object.keys(notas);
+  const alvo = document.getElementById("conteudoBoletim");
+
+  if (materias.length === 0) {
+    alvo.innerHTML = `<p class="vazio">Nenhuma nota lançada ainda.</p>`;
+    return;
+  }
+
+  let soma = 0;
+  const linhas = materias
+    .sort((a, b) => a.localeCompare(b, "pt-BR"))
+    .map((m) => {
+      const nota = Number(notas[m]);
+      soma += nota;
+      const classe = nota >= MEDIA_APROVACAO ? "ok" : "baixa";
+      const del = gestor
+        ? `<td><button class="acao-del" onclick="removerNota('${escapar(aluno)}','${escapar(m)}')">Remover</button></td>`
+        : "";
+      return `
+        <tr>
+          <td>${escapar(m)}</td>
+          <td><span class="nota ${classe}">${nota.toFixed(1)}</span></td>
+          ${del}
+        </tr>`;
+    })
+    .join("");
+
+  const media = soma / materias.length;
+  const aprovado = media >= MEDIA_APROVACAO;
+  const cabecalhoDel = gestor ? "<th></th>" : "";
+
+  alvo.innerHTML = `
+    <table>
+      <thead>
+        <tr><th>Matéria</th><th>Nota</th>${cabecalhoDel}</tr>
+      </thead>
+      <tbody>${linhas}</tbody>
+    </table>
+    <div class="resumo">
+      <div class="media">Média geral: <b>${media.toFixed(1)}</b></div>
+      <span class="situacao ${aprovado ? "aprovado" : "recuperacao"}">
+        ${aprovado ? "✅ Aprovado" : "⚠️ Recuperação"}
+      </span>
+    </div>
+  `;
+}
+
+/* ===== LOGOUT ===== */
+function logout() {
+  if (!confirm("Deseja sair?")) return;
+  localStorage.removeItem("usuario");
+  localStorage.removeItem("tipo");
+  localStorage.removeItem("loginTime");
+  window.location.href = "index.html";
+}
+
+/* ===== INÍCIO ===== */
+window.onload = function () {
+  const user = localStorage.getItem("usuario");
+  const tipo = localStorage.getItem("tipo");
+
+  if (!user || !tipo) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const rotulo = { admin: "Administrador", professor: "Professor", aluno: "Aluno" }[tipo] || tipo;
+  document.getElementById("subtitulo").textContent = `Conectado como ${user} (${rotulo})`;
+
+  if (ehGestor()) {
+    document.getElementById("areaGestor").style.display = "block";
+
+    // preenche matérias
+    document.getElementById("selMateria").innerHTML =
+      MATERIAS.map((m) => `<option value="${m}">${m}</option>`).join("");
+
+    // preenche alunos
+    const alunos = listaAlunos();
+    document.getElementById("selAluno").innerHTML = alunos.length
+      ? alunos.map((a) => `<option value="${escapar(a)}">${escapar(a)}</option>`).join("")
+      : `<option value="">(nenhum aluno)</option>`;
+  }
+
+  mostrarBoletim();
+};
+</script>
+
+</body>
+</html>

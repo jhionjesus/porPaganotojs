@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+</head>
+
+<body>
+
+<h1>🔐 Painel Admin</h1>
+
+<p id="nome"></p>
+<p id="tempo"></p>
+<p>📘 Currículo: Gestão escolar / Administração / Ensino</p>
+
+<script>
+
+let inicio = localStorage.getItem("inicio");
+let usuario = localStorage.getItem("usuario");
+
+document.getElementById("nome").innerText = "Usuário: " + usuario;
+
+setInterval(()=>{
+let tempo = Math.floor((Date.now() - inicio)/1000);
+document.getElementById("tempo").innerText = "Tempo logado: " + tempo + "s";
+},1000);
+
+</script>
+
+</body>
+</html>
