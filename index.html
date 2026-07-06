@@ -125,6 +125,7 @@
     <a href="index.html">Início</a>
     <a href="perfil.html" id="linkPerfil" style="display:none;">👤 Perfil</a>
     <a href="livros.html">📚 Livros</a>
+    <a href="boletim.html">📊 Boletim</a>
     <a href="contato.html">Contato</a>
     <a href="professores.html">Professores</a>
     <a href="calendario.html">Calendário</a>
@@ -273,6 +274,9 @@ function fazerLogin(event) {
   if (u === "jhion" && s === "12345") {
     entrar("Admin", "admin");
 
+  } else if (u === "professor" && s === "prof123") {
+    entrar("Professor", "professor");
+
   } else if (u === "aluno" && s === "1234") {
     entrar("Aluno", "aluno");
 
@@ -299,7 +303,7 @@ function fazerCadastro(event) {
 
   const cadastros = lerCadastros();
 
-  if (cadastros[u] || u === "jhion" || u === "aluno") {
+  if (cadastros[u] || u === "jhion" || u === "aluno" || u === "professor") {
     alert("Este usuário já existe!");
     return;
   }
